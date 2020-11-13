@@ -44,4 +44,7 @@ public class Topic {
     		  inverseJoinColumns = @JoinColumn(name = "topic_id"))
     private Set<Tag> tags;
     
+    @ManyToMany(mappedBy = "followtopics")
+    private Set<User> userfollowtopics;
+    
 }

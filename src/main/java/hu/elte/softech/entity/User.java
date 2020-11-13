@@ -41,7 +41,14 @@ public class User {
     		  inverseJoinColumns = @JoinColumn(name = "entry_id"))
     private Set<Entry> favs;
     
+    @ManyToMany
+    @JoinTable(name = "FollowTopic", 
+    		  joinColumns = @JoinColumn(name = "user_id"), 
+    		  inverseJoinColumns = @JoinColumn(name = "topic_id"))
+    private Set<Topic> followtopics;
     
+    @OneToMany(mappedBy="user")
+    private List<Ranking> rankings;
     
 }
 
