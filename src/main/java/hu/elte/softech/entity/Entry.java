@@ -34,6 +34,6 @@ public class Entry {
     private Topic topic;
     
     @ManyToMany(mappedBy = "favs")
-    Set<User> userfavs;
+    private Set<User> userfavs;
 
 }
