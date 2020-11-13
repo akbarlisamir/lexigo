@@ -47,5 +47,8 @@ public class User {
     		  inverseJoinColumns = @JoinColumn(name = "topic_id"))
     private Set<Topic> followtopics;
     
+    @OneToMany(mappedBy="user")
+    private List<Ranking> rankings;
+    
 }
 

@@ -1,17 +1,13 @@
 package hu.elte.softech.entity;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,25 +16,19 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-public class Entry {
+public class Ranking {
 	
 	@Id
     @GeneratedValue
     private int id;
 
-    @Column(nullable = false, unique = true)
-    private String value;
-    
-    @ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.LAZY)
     private User user;
+ 
+	@ManyToOne(fetch=FetchType.LAZY)
+    private Entry entry;
     
-    @ManyToOne
-    private Topic topic;
-    
-    @ManyToMany(mappedBy = "favs")
-    private Set<User> userfavs;
-    
-    @OneToMany(mappedBy="entry")
-    private List<Ranking> rankings;
-
+    @Column(nullable = false)
+    private Boolean value; 
+	
 }
