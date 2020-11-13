@@ -23,8 +23,8 @@ import java.util.Set;
 public class Topic {
 
     @Id
-    @GeneratedValue
-    private int id;
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    private long id;
 
     @Column(nullable = false, unique = true)
     private String value;
