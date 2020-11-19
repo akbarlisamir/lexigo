@@ -22,6 +22,11 @@ public class UserController {
 	@Autowired
 	private UserRepository ur;
 	
+	@RequestMapping(method=RequestMethod.GET,path="/users")
+	public List<User> all() {
+	    return ur.findAll();
+	}
+	
 	@RequestMapping(method=RequestMethod.GET, path="/login/user/{username}")
 	public User findOneUser(@PathVariable String username) {
 		User user = ur.findUserByUsername(username);
@@ -31,6 +36,33 @@ public class UserController {
 		return user;
 	}
 	
+	@RequestMapping(method=RequestMethod.POST, path="/register/user")
+	public ResponseEntity<Object> newUser(@RequestBody User nU) {
+		User savedUser = ur.save(nU);
+		
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+			.buildAndExpand(savedUser.getId()).toUri();
+		return ResponseEntity.created(location).build();
+	}
 	
+	@RequestMapping(method=RequestMethod.PUT,path="/user/edit/{id}")
+	public User editUser(@RequestBody User nU, @PathVariable Long id) {
+	    return ur.findById(id).map(user -> {
+	    	  user.setUsername(nU.getUsername());
+	    	  user.setEmail(nU.getEmail());
+	    	  user.setPassword(nU.getPassword());
+	    	  user.setRole(nU.getRole());
+	    	  return ur.save(user);
+	      })
+	      .orElseGet(() -> {
+	    	  nU.setId(id);
+	    	  return ur.save(nU);
+	      });
+	  }
+	
+	@RequestMapping(method=RequestMethod.DELETE,path="/user/delete/{id}")
+	public void deleteUser(@PathVariable Long id) {
+	    ur.deleteById(id);
+	}
 
 }

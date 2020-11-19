@@ -27,13 +27,13 @@ public class TagController {
 		return tr.findAll();
 	}
 	
-	@RequestMapping(method=RequestMethod.GET, path="/tag/{id}")
-	public Tag findOneTag(@PathVariable int id) {
-		Optional<Tag> tag = tr.findById(id);
-		if(!tag.isPresent()) {
-			//throw new UserNotFoundException("id-" + id);
-		}
-		return tag.get();
-	}
+//	@RequestMapping(method=RequestMethod.GET, path="/tag/{id}")
+//	public Tag findOneTag(@PathVariable Long id) {
+//		Optional<Tag> tag = tr.findById(id);
+//		if(!tag.isPresent()) {
+//			//throw new UserNotFoundException("id-" + id);
+//		}
+//		return tag.get();
+//	}
 
 }

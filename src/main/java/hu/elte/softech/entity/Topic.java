@@ -24,13 +24,13 @@ public class Topic {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(nullable = false, unique = true)
     private String value;
 
-    @Column(nullable = false)
-    private Date created;
+//    @Column(nullable = false)
+//    private Date created;
 
     @ManyToOne(fetch=FetchType.LAZY)
     private User user;

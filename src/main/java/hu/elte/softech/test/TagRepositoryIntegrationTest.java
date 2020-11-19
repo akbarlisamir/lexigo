@@ -14,11 +14,11 @@ import hu.elte.softech.entity.Tag;
 
 public class TagRepositoryIntegrationTest {
 	
-	@Test
-    public void testGetTagById() {
-        TagController tagController = new TagController();
-        String tagName = tagController.findOneTag(155).getValue();
-        assertEquals("World", tagName);
-    }
+//	@Test
+//    public void testGetTagById() {
+//        TagController tagController = new TagController();
+//        String tagName = tagController.findOneTag(155).getValue();
+//        assertEquals("World", tagName);
+//    }
 
 }
