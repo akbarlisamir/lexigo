@@ -5,15 +5,17 @@ import lombok.*;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Data
 @Entity
+@EqualsAndHashCode
 public class User {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(nullable = false, unique = true, length = 20)
     private String username;
@@ -21,13 +23,16 @@ public class User {
     @Column(nullable = false)
     private String password;
     
+    @Column(nullable = false)
+    private String role;
+    
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
-    private Date createdTime;
-    
-    private Date birthday;
+//    @Column(nullable = false)
+//    private Date createdTime;
+//    
+//    private Date birthday;
     
     @OneToMany(mappedBy="user")
     private List<Topic> topics;
@@ -48,7 +53,7 @@ public class User {
     private Set<Topic> followtopics;
     
     @OneToMany(mappedBy="user")
-    private List<Ranking> rankings;
+    private List<Ranking> rankings;    
     
 }
 

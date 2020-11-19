@@ -18,5 +18,13 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 public class RankingController {
+	
+	@Autowired
+	private RankingRepository er;
+	
+//	@RequestMapping(method=RequestMethod.GET, path="/entrys")
+//	public List<Entry> retrieveAllEntrys() {
+//		return er.findAll();
+//	}
 
 }

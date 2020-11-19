@@ -18,5 +18,82 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 public class EntryController {
+	
+	@Autowired
+	private EntryRepository er;
+	
+	@Autowired
+	private UserRepository ur;
+	
+	@Autowired
+	private TopicRepository tr;
+	
+	@RequestMapping(method=RequestMethod.GET, path="/entrys")
+	public List<Entry> retrieveAllEntrys() {
+		return er.findAll();
+	}
+	
+	@RequestMapping(method=RequestMethod.GET, path="/entrys/user/{username}")
+	public List<Entry> findOneUserEntrys(@PathVariable String username) {
+		User user = ur.findUserByUsername(username);
+		System.out.println(user.getEmail());
+		if(user == null) {
+			//throw new UserNotFoundException("id-" + id);
+		}
+
+		return er.findAllForUser(user);
+		
+	}
+	
+	@RequestMapping(method=RequestMethod.GET, path="/entrys/topic/{topic}")
+	public List<Entry> findOneTopicEntrys(@PathVariable String topicname) {
+		Topic topic = tr.findTopicByTopicName(topicname);
+		if(topic == null) {
+			//throw new UserNotFoundException("id-" + id);
+		}
+
+		return er.findAllForTopic(topic);
+		
+	}
+	
+	@RequestMapping(method=RequestMethod.GET, path="/entry/{username}/{topic}")
+	public List<Entry> findAllTopicUserEntry(@PathVariable String username, @PathVariable String topicname) {
+		Topic topic = tr.findTopicByTopicName(topicname);
+		User user = ur.findUserByUsername(username);
+		if(topic == null) {
+			//throw new UserNotFoundException("id-" + id);
+		}
+
+		return er.findEntryForTopicUser(topic, user);
+		
+	}
+	
+	
+	
+	@RequestMapping(method=RequestMethod.POST, path="/entry/new")
+	public ResponseEntity<Object> newUser(@RequestBody Entry nE) {
+		Entry savedEntry = er.save(nE);
+		
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+			.buildAndExpand(savedEntry.getId()).toUri();
+		return ResponseEntity.created(location).build();
+	}
+	
+	@RequestMapping(method=RequestMethod.PUT,path="/entry/edit/{id}")
+	public Entry editEntry(@RequestBody Entry nE, @PathVariable Long id) {
+	    return er.findById(id).map(entry -> {
+	    	entry.setValue(nE.getValue());
+	    	return er.save(entry);
+	      })
+	      .orElseGet(() -> {
+	    	  nE.setId(id);
+	    	  return er.save(nE);
+	      });
+	  }
+	
+	@RequestMapping(method=RequestMethod.DELETE,path="/entry/delete/{id}")
+	public void deleteEntry(@PathVariable Long id) {
+	    er.deleteById(id);
+	}
 
 }
