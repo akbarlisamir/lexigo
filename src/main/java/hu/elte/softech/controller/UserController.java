@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import hu.elte.softech.entity.*;
 import hu.elte.softech.repository.*;
+import hu.elte.softech.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 public class UserController {
+	
+	@Autowired
+	private UserService us;
 	
 	@Autowired
 	private UserRepository ur;
@@ -38,11 +42,8 @@ public class UserController {
 	
 	@RequestMapping(method=RequestMethod.POST, path="/register/user")
 	public ResponseEntity<Object> newUser(@RequestBody User nU) {
-		User savedUser = ur.save(nU);
 		
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-			.buildAndExpand(savedUser.getId()).toUri();
-		return ResponseEntity.created(location).build();
+		return us.newUser(nU);
 	}
 	
 	@RequestMapping(method=RequestMethod.PUT,path="/user/edit/{id}")
