@@ -3,6 +3,8 @@ package hu.elte.softech.controller;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+
 import hu.elte.softech.entity.*;
 import hu.elte.softech.repository.*;
 
@@ -22,6 +24,9 @@ public class TagController {
 	@Autowired
 	private TagRepository tr;
 	
+	@Autowired
+	private TopicRepository tor;
+	
 	@RequestMapping(method=RequestMethod.GET, path="/tags")
 	public List<Tag> retrieveAllTags() {
 		return tr.findAll();
@@ -34,6 +39,12 @@ public class TagController {
 //			//throw new UserNotFoundException("id-" + id);
 //		}
 //		return tag.get();
+//	}
+	
+//	@RequestMapping(method=RequestMethod.GET,path="/tag/{id}")
+//	public Set<Topic> retrieveAllTopicsForTag(@PathVariable Long id){
+//		Optional<Tag> tag = tr.findById(id);
+//		return tr.findTopicsOfTag(tag.get());
 //	}
 
 }

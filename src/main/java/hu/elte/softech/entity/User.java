@@ -3,6 +3,9 @@ package hu.elte.softech.entity;
 import lombok.*;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -34,25 +37,30 @@ public class User {
 //    
 //    private Date birthday;
     
-    @OneToMany(mappedBy="user")
+    @OneToMany(fetch = FetchType.LAZY,mappedBy="user")
+    @JsonIgnore
     private List<Topic> topics;
     
-    @OneToMany(mappedBy="user")
+    @OneToMany(fetch = FetchType.LAZY,mappedBy="user")
+    @JsonIgnore
     private List<Entry> entries;
     
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "Favorite", 
     		  joinColumns = @JoinColumn(name = "user_id"), 
     		  inverseJoinColumns = @JoinColumn(name = "entry_id"))
+    @JsonIgnore
     private Set<Entry> favs;
     
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "FollowTopic", 
     		  joinColumns = @JoinColumn(name = "user_id"), 
     		  inverseJoinColumns = @JoinColumn(name = "topic_id"))
+    @JsonIgnore
     private Set<Topic> followtopics;
     
-    @OneToMany(mappedBy="user")
+    @OneToMany(fetch = FetchType.LAZY,mappedBy="user")
+    @JsonIgnore
     private List<Ranking> rankings;    
     
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import hu.elte.softech.entity.*;
 import hu.elte.softech.repository.*;
+import hu.elte.softech.service.TopicService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 public class TopicController {
+	
+	@Autowired
+	private TopicService ts;
 	
 	@Autowired
 	private TopicRepository tr;
