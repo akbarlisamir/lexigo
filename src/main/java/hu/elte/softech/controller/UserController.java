@@ -33,11 +33,7 @@ public class UserController {
 	
 	@RequestMapping(method=RequestMethod.GET, path="/login/user/{username}")
 	public User findOneUser(@PathVariable String username) {
-		User user = ur.findUserByUsername(username);
-		if(user == null) {
-			//throw new UserNotFoundException("id-" + id);
-		}
-		return user;
+		return us.findOneUser(username);
 	}
 	
 	@RequestMapping(method=RequestMethod.POST, path="/register/user")
@@ -47,23 +43,13 @@ public class UserController {
 	}
 	
 	@RequestMapping(method=RequestMethod.PUT,path="/user/edit/{id}")
-	public User editUser(@RequestBody User nU, @PathVariable Long id) {
-	    return ur.findById(id).map(user -> {
-	    	  user.setUsername(nU.getUsername());
-	    	  user.setEmail(nU.getEmail());
-	    	  user.setPassword(nU.getPassword());
-	    	  user.setRole(nU.getRole());
-	    	  return ur.save(user);
-	      })
-	      .orElseGet(() -> {
-	    	  nU.setId(id);
-	    	  return ur.save(nU);
-	      });
+	public User editUser(@RequestBody User eU, @PathVariable Long id) {
+	    return us.editUser(eU, id);
 	  }
 	
 	@RequestMapping(method=RequestMethod.DELETE,path="/user/delete/{id}")
-	public void deleteUser(@PathVariable Long id) {
-	    ur.deleteById(id);
+	public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+	    return us.deleteUser(id);
 	}
 
 }

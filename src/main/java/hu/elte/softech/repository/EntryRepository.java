@@ -1,6 +1,7 @@
 package hu.elte.softech.repository;
 
 import hu.elte.softech.entity.Entry;
+import hu.elte.softech.entity.Tag;
 import hu.elte.softech.entity.User;
 import hu.elte.softech.entity.Topic;
 
@@ -21,5 +22,8 @@ public interface EntryRepository extends JpaRepository<Entry,Long> {
 
 	@Query("SELECT e FROM Entry e WHERE e.topic = ?1 AND e.user = ?2")
 	public List<Entry> findEntryForTopicUser(Topic topic, User user);
+
+//	@Query("SELECT e FROM Entry e WHERE e.topic IN (SELECT tt.topictags FROM TopicTag tt WHERE tt.tags = ?1)")
+//	public List<Entry> findAllForTag(Tag tag);
 	
 }

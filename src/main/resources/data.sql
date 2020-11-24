@@ -8,6 +8,7 @@ INSERT INTO USER VALUES(302,'user302@mail.com','123','user','username302');
 INSERT INTO USER VALUES(303,'user303@mail.com','123','user','username303');
 INSERT INTO USER VALUES(304,'user304@mail.com','123','user','username304');
 INSERT INTO USER VALUES(305,'user305@mail.com','123','user','username305');
+INSERT INTO USER VALUES(306,'samir@mail.com','123','admin','samir');
 
 INSERT INTO TOPIC VALUES(220,'Quhsfi u',300);
 INSERT INTO TOPIC VALUES(221,'Iau erg a',303);

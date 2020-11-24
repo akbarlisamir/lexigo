@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import hu.elte.softech.entity.*;
 import hu.elte.softech.repository.*;
+import hu.elte.softech.service.EntryService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 public class EntryController {
 	
 	@Autowired
+	private EntryService es;
+	
+	@Autowired
 	private EntryRepository er;
 	
 	@Autowired
@@ -28,47 +32,23 @@ public class EntryController {
 	@Autowired
 	private TopicRepository tr;
 	
+	@Autowired
+	private TagRepository tgr;
+	
 	@RequestMapping(method=RequestMethod.GET, path="/entrys")
 	public List<Entry> retrieveAllEntrys() {
 		return er.findAll();
 	}
 	
+	@RequestMapping(method=RequestMethod.GET, path="/entry/{id}")
+	public Entry retrieveOneEntry(@PathVariable Long id) {
+		return er.findById(id).get();
+	}
+	
 	@RequestMapping(method=RequestMethod.GET, path="/entrys/user/{username}")
 	public List<Entry> findOneUserEntrys(@PathVariable String username) {
-		User user = ur.findUserByUsername(username);
-		System.out.println(user.getEmail());
-		if(user == null) {
-			//throw new UserNotFoundException("id-" + id);
-		}
-
-		return er.findAllForUser(user);
-		
+		return es.findOneUserEntrys(username);		
 	}
-	
-	@RequestMapping(method=RequestMethod.GET, path="/entrys/topic/{topic}")
-	public List<Entry> findOneTopicEntrys(@PathVariable String topicname) {
-		Topic topic = tr.findTopicByTopicName(topicname);
-		if(topic == null) {
-			//throw new UserNotFoundException("id-" + id);
-		}
-
-		return er.findAllForTopic(topic);
-		
-	}
-	
-	@RequestMapping(method=RequestMethod.GET, path="/entry/{username}/{topic}")
-	public List<Entry> findAllTopicUserEntry(@PathVariable String username, @PathVariable String topicname) {
-		Topic topic = tr.findTopicByTopicName(topicname);
-		User user = ur.findUserByUsername(username);
-		if(topic == null) {
-			//throw new UserNotFoundException("id-" + id);
-		}
-
-		return er.findEntryForTopicUser(topic, user);
-		
-	}
-	
-	
 	
 	@RequestMapping(method=RequestMethod.POST, path="/entry/new")
 	public ResponseEntity<Object> newUser(@RequestBody Entry nE) {
@@ -94,6 +74,40 @@ public class EntryController {
 	@RequestMapping(method=RequestMethod.DELETE,path="/entry/delete/{id}")
 	public void deleteEntry(@PathVariable Long id) {
 	    er.deleteById(id);
+	}
+	
+	@RequestMapping(method=RequestMethod.GET, path="/entrys/topic/{topicid}")
+	public List<Entry> findOneTopicEntrys(@PathVariable Long topicid) {
+		Optional<Topic> topic = tr.findById(topicid);
+		if(topic == null) {
+			//throw new UserNotFoundException("id-" + id);
+		}
+
+		return er.findAllForTopic(topic.get());
+		
+	}
+	
+//	@RequestMapping(method=RequestMethod.GET, path="/entrys/tag/{tagid}")
+//	public List<Entry> findOneTagEntrys(@PathVariable Long tagid) {
+//		Optional<Tag> tag = tgr.findById(tagid);
+//		if(tag == null) {
+//			//throw new UserNotFoundException("id-" + id);
+//		}
+//
+//		return er.findAllForTag(tag.get());
+//		
+//	}
+	
+	@RequestMapping(method=RequestMethod.GET, path="/entry/{username}/{topicid}")
+	public List<Entry> findAllTopicUserEntry(@PathVariable String username, @PathVariable Long topicid) {
+		Optional<Topic> topic = tr.findById(topicid);
+		User user = ur.findUserByUsername(username);
+		if(topic == null) {
+			//throw new UserNotFoundException("id-" + id);
+		}
+
+		return er.findEntryForTopicUser(topic.get(), user);
+		
 	}
 
 }

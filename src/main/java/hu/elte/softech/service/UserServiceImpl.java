@@ -24,6 +24,38 @@ public class UserServiceImpl implements UserService{
 			.buildAndExpand(savedUser.getId()).toUri();
 		return ResponseEntity.created(location).build();
 	}
+
+	@Override
+	public User editUser(User eU, Long id) {
+		return ur.findById(id).map(user -> {
+	    	  user.setUsername(eU.getUsername());
+	    	  user.setEmail(eU.getEmail());
+	    	  user.setPassword(eU.getPassword());
+	    	  user.setRole(eU.getRole());
+	    	  return ur.save(user);
+	      })
+	      .orElseGet(() -> {
+	    	  eU.setId(id);
+	    	  return ur.save(eU);
+	      });
+	}
+
+	@Override
+	public ResponseEntity<Void> deleteUser(Long id) {
+		ur.deleteById(id);
+	    
+	    return ResponseEntity.noContent().build();
+	}
+
+	@Override
+	public User findOneUser(String username) {
+		User user = ur.findUserByUsername(username);
+		if(user == null) {
+			//throw new UserNotFoundException("id-" + id);
+		}
+		return user;
+	}
+	
 	
 
 }
