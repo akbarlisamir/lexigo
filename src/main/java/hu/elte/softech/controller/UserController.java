@@ -19,16 +19,19 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 public class UserController {
+	@Autowired
+	private TstRepo tstr;
 	
 	@Autowired
 	private UserService us;
 	
-	@Autowired
-	private UserRepository ur;
+//	@Autowired
+//	private UserRepository ur;
 	
 	@RequestMapping(method=RequestMethod.GET,path="/users")
 	public List<User> all() {
-	    return ur.findAll();
+//		ur.findAll();
+	    return us.allUsers();
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, path="/login/user/{username}")
@@ -50,6 +53,12 @@ public class UserController {
 	@RequestMapping(method=RequestMethod.DELETE,path="/user/delete/{id}")
 	public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
 	    return us.deleteUser(id);
+	}
+	
+	@RequestMapping(method=RequestMethod.DELETE,path="/tst/delete/{id}")
+	public ResponseEntity<Void> deleteTst(@PathVariable Long id) {
+	    tstr.deleteById(id);
+	    return ResponseEntity.noContent().build();
 	}
 
 }

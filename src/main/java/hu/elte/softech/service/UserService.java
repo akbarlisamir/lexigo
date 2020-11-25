@@ -1,5 +1,7 @@
 package hu.elte.softech.service;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 
 import hu.elte.softech.entity.User;
@@ -13,5 +15,7 @@ public interface UserService {
 	ResponseEntity<Void> deleteUser(Long id);
 	
 	User findOneUser(String username);
+	
+	List<User> allUsers();
 
 }

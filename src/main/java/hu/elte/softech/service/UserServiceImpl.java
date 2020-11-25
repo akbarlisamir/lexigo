@@ -1,6 +1,7 @@
 package hu.elte.softech.service;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -54,6 +55,11 @@ public class UserServiceImpl implements UserService{
 			//throw new UserNotFoundException("id-" + id);
 		}
 		return user;
+	}
+
+	@Override
+	public List<User> allUsers() {
+		return ur.findAll();
 	}
 	
 	

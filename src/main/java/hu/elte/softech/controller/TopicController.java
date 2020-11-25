@@ -28,7 +28,18 @@ public class TopicController {
 	
 	@RequestMapping(method=RequestMethod.GET, path="/topics")
 	public List<Topic> retrieveAllTopics() {
+		//return ts.allTopics();
 		return tr.findAll();
+	}
+	
+	@RequestMapping(method=RequestMethod.POST, path="/topic")
+	public ResponseEntity<Object> newTopic(@RequestBody TopicDTO nTDTO) {
+		return ts.createTopic(nTDTO);
+	}
+	
+	@RequestMapping(method=RequestMethod.DELETE,path="/topic/delete/{id}")
+	public ResponseEntity<Void> deleteTopic(@PathVariable Long id) {
+	    return ts.deleteTopic(id);
 	}
 
 }

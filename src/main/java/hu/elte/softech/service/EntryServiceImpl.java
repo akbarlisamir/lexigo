@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import hu.elte.softech.entity.Entry;
+import hu.elte.softech.entity.EntryUserTagsTopic;
 import hu.elte.softech.entity.User;
 import hu.elte.softech.repository.EntryRepository;
 import hu.elte.softech.repository.UserRepository;
@@ -41,5 +42,48 @@ public class EntryServiceImpl implements EntryService {
 
 		return er.findAllForUser(user);
 	}
+
+	@Override
+	public Entry retrieveOneEntry(Long id) {
+		return er.findById(id).get();
+	}
+
+	@Override
+	public Entry editEntry(Entry eE, Long id) {
+		return er.findById(id).map(entry -> {
+	    	entry.setValue(eE.getValue());
+	    	return er.save(entry);
+	      })
+	      .orElseGet(() -> {
+	    	  eE.setId(id);
+	    	  return er.save(eE);
+	      });
+	}
+
+	@Override
+	public ResponseEntity<Void> deleteEntry(Long id) {
+		er.deleteById(id);
+	    
+	    return ResponseEntity.noContent().build();
+	}
+
+//	@Override
+//	public List<EntryUserTagsTopic> getEntrysFull() {
+//		return ((List<Entry>) er
+//                .findAll())
+//                .stream()
+//                .map(this::convertToUserLocationDTO)
+//				        .collect(Collectors.toList());
+//	}
+//	
+//	 private EntryUserTagsTopic convertToEUTT(Entry e) {
+//		 	EntryUserTagsTopic eutt = new EntryUserTagsTopic();
+//		 	
+//	        userLocationDTO.setUsername(user.getUsername());
+//	        Location location = user.getLocation();
+//	        userLocationDTO.setLat(location.getLat());
+//	        userLocationDTO.setLng(location.getLng());
+//	        userLocationDTO.setPlace(location.getPlace());
+//	        return userLocationDTO;
 
 }
