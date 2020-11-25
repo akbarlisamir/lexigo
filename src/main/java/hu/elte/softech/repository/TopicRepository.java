@@ -15,5 +15,9 @@ public interface TopicRepository extends JpaRepository<Topic,Long> {
 	@Query("SELECT t FROM Topic t WHERE t.value = ?1")
 	public Topic findTopicByTopicName(String topicname);
 	
+	//List<Topic> findByValueContaining(String value);
 	
+//	@Query("SELECT t FROM Topic t WHERE t.value = ?1")
+//	public Topic findTopicByTopicName(String topicname);
+	//find topics by clicking tag
 }

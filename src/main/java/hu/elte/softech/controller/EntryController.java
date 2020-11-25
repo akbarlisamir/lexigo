@@ -42,7 +42,7 @@ public class EntryController {
 	
 	@RequestMapping(method=RequestMethod.GET, path="/entry/{id}")
 	public Entry retrieveOneEntry(@PathVariable Long id) {
-		return er.findById(id).get();
+		return es.retrieveOneEntry(id);
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, path="/entrys/user/{username}")
@@ -51,30 +51,31 @@ public class EntryController {
 	}
 	
 	@RequestMapping(method=RequestMethod.POST, path="/entry/new")
-	public ResponseEntity<Object> newUser(@RequestBody Entry nE) {
-		Entry savedEntry = er.save(nE);
-		
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-			.buildAndExpand(savedEntry.getId()).toUri();
-		return ResponseEntity.created(location).build();
+	public ResponseEntity<Object> newEntry(@RequestBody Entry nE) {
+		return es.newEntry(nE);
 	}
 	
 	@RequestMapping(method=RequestMethod.PUT,path="/entry/edit/{id}")
-	public Entry editEntry(@RequestBody Entry nE, @PathVariable Long id) {
-	    return er.findById(id).map(entry -> {
-	    	entry.setValue(nE.getValue());
-	    	return er.save(entry);
-	      })
-	      .orElseGet(() -> {
-	    	  nE.setId(id);
-	    	  return er.save(nE);
-	      });
+	public Entry editEntry(@RequestBody Entry eE, @PathVariable Long id) {
+	    return es.editEntry(eE, id);
 	  }
 	
 	@RequestMapping(method=RequestMethod.DELETE,path="/entry/delete/{id}")
-	public void deleteEntry(@PathVariable Long id) {
-	    er.deleteById(id);
+	public ResponseEntity<Void> deleteEntry(@PathVariable Long id) {
+	    return es.deleteEntry(id);
 	}
+	
+//	@RequestMapping(method=RequestMethod.GET, path="/entry/{id}")
+//	public ResponseEntity<Object> retrieveEntrywithtags(@PathVariable Long id) {
+//		Optional<Tag> tag = tgr.findById(tagid);
+//		if(tag == null) {
+//			//throw new UserNotFoundException("id-" + id);
+//		}
+//
+//		return er.findAllForTag(tag.get());
+//		
+//	}
+
 	
 	@RequestMapping(method=RequestMethod.GET, path="/entrys/topic/{topicid}")
 	public List<Entry> findOneTopicEntrys(@PathVariable Long topicid) {

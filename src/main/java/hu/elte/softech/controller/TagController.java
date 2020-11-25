@@ -7,6 +7,7 @@ import java.util.Set;
 
 import hu.elte.softech.entity.*;
 import hu.elte.softech.repository.*;
+import hu.elte.softech.service.TagService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,24 +23,34 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 public class TagController {
 	
 	@Autowired
-	private TagRepository tr;
+	private TagService ts;
 	
-	@Autowired
-	private TopicRepository tor;
+//	@Autowired
+//	private TagRepository tr;
+//	
+//	@Autowired
+//	private TopicRepository tor;
 	
 	@RequestMapping(method=RequestMethod.GET, path="/tags")
 	public List<Tag> retrieveAllTags() {
-		return tr.findAll();
+		return ts.allTags();
+		//return tr.findAll();
 	}
 	
-//	@RequestMapping(method=RequestMethod.GET, path="/tag/{id}")
-//	public Tag findOneTag(@PathVariable Long id) {
-//		Optional<Tag> tag = tr.findById(id);
-//		if(!tag.isPresent()) {
-//			//throw new UserNotFoundException("id-" + id);
-//		}
-//		return tag.get();
-//	}
+	@RequestMapping(method=RequestMethod.GET, path="/tag/one/{id}")
+	public Tag findOneTag(@PathVariable Long id) {
+		return ts.findOneTag(id);
+	}
+	
+	@RequestMapping(method=RequestMethod.GET, path="/tag/{id}/topics")
+	public Set<Topic> findOneTagTopics(@PathVariable Long id) {
+		return ts.findOneTagTopics(id);
+	}
+	
+	@RequestMapping(method=RequestMethod.DELETE,path="/tag/delete/{id}")
+	public ResponseEntity<Void> deleteTag(@PathVariable Long id) {
+	    return ts.deleteTag(id);
+	}
 	
 //	@RequestMapping(method=RequestMethod.GET,path="/tag/{id}")
 //	public Set<Topic> retrieveAllTopicsForTag(@PathVariable Long id){

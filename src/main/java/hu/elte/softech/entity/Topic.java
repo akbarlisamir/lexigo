@@ -2,6 +2,7 @@ package hu.elte.softech.entity;
 
 import lombok.*;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,14 +14,18 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PostLoad;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Data
 @Entity
-public class Topic {
+public class Topic implements Serializable{
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -32,19 +37,36 @@ public class Topic {
 //    @Column(nullable = false)
 //    private Date created;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    //@OldOne
+//    @ManyToOne(fetch=FetchType.EAGER)
+//    @JsonIgnore
+//    private User user;
+    
+    @ManyToOne
+    @JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
     private User user;
     
-    @OneToMany(mappedBy="topic")
+    @OneToMany(fetch=FetchType.LAZY,mappedBy="topic",cascade=CascadeType.ALL)
+    @JsonIgnore
     private List<Entry> entries;
     
-    @ManyToMany
+    @ManyToMany(fetch=FetchType.LAZY,cascade=CascadeType.ALL)
     @JoinTable(name = "TopicTag", 
-    		  joinColumns = @JoinColumn(name = "tag_id"), 
-    		  inverseJoinColumns = @JoinColumn(name = "topic_id"))
+    		  joinColumns = {@JoinColumn(name = "topic_id", referencedColumnName = "id",
+              nullable = false, updatable = false)}, 
+    		  inverseJoinColumns = {@JoinColumn(name = "tag_id", referencedColumnName = "id",
+              nullable = false, updatable = false)})
+    @JsonIgnore
     private Set<Tag> tags;
     
-    @ManyToMany(mappedBy = "followtopics")
+    @ManyToMany(fetch=FetchType.LAZY,mappedBy = "followtopics",cascade=CascadeType.ALL)
+    @JsonIgnore
     private Set<User> userfollowtopics;
+    
+    @PostLoad
+    private void postLoadFunction(){
+        System.out.println("Topic.java called!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+    	//log.info("BankBranch PostLoad method called");
+    }
     
 }
