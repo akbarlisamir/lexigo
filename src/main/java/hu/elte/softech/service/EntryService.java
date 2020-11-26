@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
 import hu.elte.softech.entity.Entry;
+import hu.elte.softech.entity.EntryRankTopic;
 import hu.elte.softech.entity.EntryUserTagsTopic;
 
 public interface EntryService {
@@ -21,7 +22,7 @@ public interface EntryService {
 	
 	Entry editEntry(Entry eE, Long id);
 	
-	ResponseEntity<Void> deleteEntry(Long id);
+	ResponseEntity<Void> deleteEntry(Long entryId);
 
 	Entry createEntry(Long userId, Long topicId, Entry nE);
 	
@@ -47,6 +48,13 @@ public interface EntryService {
 	Entry createEntryOfTopic(Long topicId, Entry entry);
 	
 	Entry createEntryOfUser(Long userId, Entry entry);
+	
+	
+	
+	
+	
+	//?
+	List<EntryRankTopic> findAllEntrysInDetailedForm();
 	
 	//dtoservice
 	

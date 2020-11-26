@@ -46,11 +46,11 @@ public class TagServiceImpl implements TagService{
 		return null;
 	}
 
+	//DELETE
 	@Override
-	public ResponseEntity<Void> deleteTag(Long id) {
-		tgr.del(id);
-		tgr.deleteById(id);
-	    
+	public ResponseEntity<Void> deleteTag(Long tagId) {
+		tgr.delFromTopicTagByTag(tagId);
+		tgr.deleteById(tagId);	    
 	    return ResponseEntity.noContent().build();
 	}
 

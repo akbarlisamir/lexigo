@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import hu.elte.softech.entity.*;
 import hu.elte.softech.repository.*;
+import hu.elte.softech.service.UserService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,15 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 public class RankingController {
+	
+	@Autowired
+	private UserService us;
+	
+	//DELETE
+	@RequestMapping(method=RequestMethod.DELETE,path="/user/{userId}/entry/{entryId}/delete")
+	public ResponseEntity<?> deleteRank(@PathVariable Long userId, @PathVariable Long entryId) {
+	    return us.deleteRankByUserEntry(userId, entryId);
+	}
 	
 //	@Autowired
 //	private RankingRepository rr;

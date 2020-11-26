@@ -1,6 +1,7 @@
 package hu.elte.softech.service;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +12,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import hu.elte.softech.entity.Entry;
-import hu.elte.softech.entity.EntryUserTagsTopic;
+import hu.elte.softech.entity.EntryRankTopic;
 import hu.elte.softech.entity.User;
 import hu.elte.softech.repository.EntryRepository;
 import hu.elte.softech.repository.TopicRepository;
 import hu.elte.softech.repository.UserRepository;
+import hu.elte.softech.repository.RankingRepository;
 
 @Service
 public class EntryServiceImpl implements EntryService {
@@ -28,6 +30,25 @@ public class EntryServiceImpl implements EntryService {
 	
 	@Autowired
 	private TopicRepository tpr;
+	
+	@Autowired
+	private RankingRepository rr;
+	
+	//DELETE
+	@Override
+	public ResponseEntity<Void> deleteEntry(Long entryId) {
+		rr.delFromRankingByEntry(entryId);
+		er.delFromFavoriteByEntry(entryId);
+		er.deleteById(entryId);
+	    return ResponseEntity.noContent().build();
+	}
+	
+	
+	
+	
+	
+	
+	
 
 	@Override
 	public ResponseEntity<Object> newEntry(Entry nE) {
@@ -63,13 +84,6 @@ public class EntryServiceImpl implements EntryService {
 	    	  eE.setId(id);
 	    	  return er.save(eE);
 	      });
-	}
-
-	@Override
-	public ResponseEntity<Void> deleteEntry(Long id) {
-		er.del(id);
-		er.deleteById(id);
-	    return ResponseEntity.noContent().build();
 	}
 
 	@Override
@@ -138,6 +152,23 @@ public class EntryServiceImpl implements EntryService {
 		Entry de = er.findByIdAndTopicId(entryId, topicId).get();
 		er.delete(de);
 		return ResponseEntity.ok().build();
+	}
+
+	@Override
+	public List<EntryRankTopic> findAllEntrysInDetailedForm() {
+		List<Entry> listE = er.findAll();
+		List<EntryRankTopic> listERT = new ArrayList();
+		for(Entry e: listE) {
+			EntryRankTopic ert = new EntryRankTopic();
+			ert.setEntry(e);
+			ert.setTopicName(e.getTopic().getValue());
+			ert.setRankUp(rr.findByEntryId(e.getId(), true));
+			ert.setRankDown(rr.findByEntryId(e.getId(), false));
+			listERT.add(ert);
+		}
+//		listERT.sort(rank<?>);
+		
+		return listERT;
 	}
 
 //	@Override

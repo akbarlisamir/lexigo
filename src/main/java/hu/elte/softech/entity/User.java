@@ -53,8 +53,8 @@ public class User {
     @JsonIgnore
     private Set<Topic> followtopics;
     
-    @OneToMany(fetch = FetchType.LAZY,mappedBy="user",cascade=CascadeType.ALL)
-    private List<Ranking> rankings;
+//    @OneToMany(fetch = FetchType.LAZY,mappedBy="user",cascade=CascadeType.ALL)
+//    private List<Ranking> rankings;
     
     
     

@@ -20,6 +20,37 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface EntryRepository extends JpaRepository<Entry,Long> {
 	
+	@Transactional
+	@Modifying      // to mark delete or update query
+    @Query(value = "DELETE FROM Entry r WHERE r.user_id = :userid",nativeQuery = true)
+	void delFromEntryByUser(@Param("userid") Long userId);
+	
+	@Transactional
+	@Modifying      // to mark delete or update query
+    @Query(value = "DELETE FROM Entry r WHERE r.entry_id = :entryid",nativeQuery = true)
+	void delFromEntryByEntry(@Param("entryid") Long entryId);
+	
+	@Transactional
+	@Modifying      // to mark delete or update query
+    @Query(value = "DELETE FROM Entry r WHERE r.topic_id = :topicid",nativeQuery = true)
+	void delFromEntryByTopic(@Param("topicid") Long topicId);
+	
+	@Transactional
+	@Modifying      // to mark delete or update query
+    @Query(value = "DELETE FROM FAVORITE fvrt WHERE fvrt.entry_id = :entryid",nativeQuery = true)
+	void delFromFavoriteByEntry(@Param("entryid") Long entryId);
+	
+	@Transactional
+	@Modifying      // to mark delete or update query
+    @Query(value = "DELETE FROM Favorite r WHERE r.user_id = :userid",nativeQuery = true)
+	void delFromFavoriteByUser(@Param("userid") Long userId);
+	
+	@Transactional
+	@Modifying      // to mark delete or update query
+    @Query(value = "DELETE FROM Favorite r WHERE r.user_id = :userid AND r.entry_id = :entryid",nativeQuery = true)
+	void delFromFavoriteByUserEntry(@Param("userid") Long userId, @Param("entryid") Long entryId);
+	
+	
 	Page<Entry> findByUserId(Long userId, Pageable pageable);
 	
 	Page<Entry> findByTopicId(Long topicId, Pageable pageable);
@@ -36,11 +67,7 @@ public interface EntryRepository extends JpaRepository<Entry,Long> {
 
 	@Query("SELECT e FROM Entry e WHERE e.topic = ?1 AND e.user = ?2")
 	public List<Entry> findEntryForTopicUser(Topic topic, User user);
-	
-	@Transactional
-	@Modifying      // to mark delete or update query
-    @Query(value = "DELETE FROM FAVORITE fvrt WHERE fvrt.entry_id = :id",nativeQuery = true)
-	void del(@Param("id") Long id);
+
 
 //	@Query("SELECT e FROM Entry e WHERE e.topic IN (SELECT tt.topictags FROM TopicTag tt WHERE tt.tags = ?1)")
 //	public List<Entry> findAllForTag(Tag tag);

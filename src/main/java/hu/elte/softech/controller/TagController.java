@@ -52,9 +52,12 @@ public class TagController {
 		return ts.findOneTagTopics(id);
 	}
 	
-	@RequestMapping(method=RequestMethod.DELETE,path="/tag/delete/{id}")
-	public ResponseEntity<Void> deleteTag(@PathVariable Long id) {
-	    return ts.deleteTag(id);
+	
+	
+	//DELETE
+	@RequestMapping(method=RequestMethod.DELETE,path="/tag/delete/{tagId}")
+	public ResponseEntity<Void> deleteTag(@PathVariable Long tagId) {
+	    return ts.deleteTag(tagId);
 	}
 	
 //	@RequestMapping(method=RequestMethod.GET,path="/tag/{id}")

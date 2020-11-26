@@ -12,10 +12,12 @@ public interface UserService {
 	
 	User editUser(User eU, Long id);
 	
-	ResponseEntity<Void> deleteUser(Long id);
+	ResponseEntity<Void> deleteUser(Long userId);
 	
 	User findOneUser(String username);
 	
 	List<User> allUsers();
+	
+	ResponseEntity<?> deleteRankByUserEntry(Long userId, Long entryId);
 
 }

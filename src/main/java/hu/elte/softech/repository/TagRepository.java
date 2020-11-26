@@ -23,8 +23,18 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
 	
 	@Transactional
 	@Modifying      // to mark delete or update query
-    @Query(value = "DELETE FROM TOPIC_TAG tt WHERE tt.tag_id = :id",nativeQuery = true)
-	void del(@Param("id") Long id);
+    @Query(value = "DELETE FROM TOPIC_TAG tt WHERE tt.tag_id = :tagid",nativeQuery = true)
+	void delFromTopicTagByTag(@Param("tagid") Long tagId);
+	
+	@Transactional
+	@Modifying      // to mark delete or update query
+    @Query(value = "DELETE FROM TOPIC_TAG tt WHERE tt.topic_id = :topicid",nativeQuery = true)
+	void delFromTopicTagByTopic(@Param("topicid") Long topicId);
+	
+	@Transactional
+	@Modifying      // to mark delete or update query
+    @Query(value = "DELETE FROM TOPIC_TAG tt WHERE tt.topic_id = :topicid AND tt.tag_id = :tagid",nativeQuery = true)
+	void delFromTopicTagByTopicTag(@Param("topicid") Long topicId,@Param("tagid") Long tagId);
 
 	@Transactional
 	@Modifying      // to mark delete or update query

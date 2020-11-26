@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import hu.elte.softech.entity.*;
+import hu.elte.softech.repository.EntryRepository;
 import hu.elte.softech.repository.TagRepository;
 import hu.elte.softech.repository.TopicRepository;
 import hu.elte.softech.repository.UserRepository;
@@ -23,6 +24,9 @@ public class TopicServiceImpl implements TopicService {
 	@Autowired 
 	private TagService tgs;
 	
+	@Autowired 
+	private EntryService es;
+	
 	@Autowired
 	private TopicRepository tr;
 	
@@ -31,6 +35,9 @@ public class TopicServiceImpl implements TopicService {
 	
 	@Autowired
 	private UserRepository ur;
+	
+	@Autowired
+	private EntryRepository er;
 
 	@Override
 	public ResponseEntity<Object> newTopic(Topic nT) {
@@ -87,10 +94,19 @@ public class TopicServiceImpl implements TopicService {
 	}
 	
 	@Override
-	public ResponseEntity<Void> deleteTopic(Long id) {
-		tr.del(id);
-		tr.deleteById(id);
-	    
+	public ResponseEntity<Void> deleteTopic(Long topicId) {
+//		er.delFromEntryByTopic(topicId);
+//		tgr.delFromTopicTagByTopic(topicId);
+//		tr.del(id);
+//		tr.deleteById(id);
+		Topic topic = tr.findById(topicId).get();
+		tgr.delFromTopicTagByTopic(topicId);
+		tr.delFromFollowTopicByTopic(topicId);
+		List<Entry> listEntry = er.findAllForTopic(topic);
+		for(Entry e: listEntry) {
+			es.deleteEntry(e.getId());
+		}
+		tr.deleteById(topicId);
 	    return ResponseEntity.noContent().build();
 	}
 
