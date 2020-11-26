@@ -4,6 +4,9 @@ import lombok.*;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.Date;
@@ -31,11 +34,6 @@ public class User {
     
     @Column(nullable = false, unique = true)
     private String email;
-
-//    @Column(nullable = false)
-//    private Date createdTime;
-//    
-//    private Date birthday;
     
     @OneToMany(fetch = FetchType.LAZY,mappedBy="user",cascade=CascadeType.ALL)
     @JsonIgnore
@@ -52,10 +50,12 @@ public class User {
     @JsonIgnore
     private Set<Entry> favs;
     
-    @ManyToMany(fetch = FetchType.LAZY,cascade=CascadeType.ALL)
+    @ManyToMany(fetch=FetchType.LAZY,cascade={CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinTable(name = "FollowTopic", 
-    		  joinColumns = @JoinColumn(name = "user_id"), 
-    		  inverseJoinColumns = @JoinColumn(name = "topic_id"))
+    		  joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id",
+              nullable = false, updatable = false)}, 
+    		  inverseJoinColumns = {@JoinColumn(name = "topic_id", referencedColumnName = "id",
+              nullable = false, updatable = false)})
     @JsonIgnore
     private Set<Topic> followtopics;
     
@@ -81,7 +81,27 @@ public class User {
 //        this.tsts.remove(tst);
 //    }
     
+//  @Column(nullable = false)
+//  private Date createdTime;
+//  
+//  private Date birthday;
     
+//    @ManyToMany(fetch = FetchType.LAZY,cascade=CascadeType.ALL)
+//    @JoinTable(name = "FollowTopic", 
+//    		  joinColumns = @JoinColumn(name = "user_id"), 
+//    		  inverseJoinColumns = @JoinColumn(name = "topic_id"))
+//    @JsonIgnore
+//    private Set<Topic> followtopics;
+    
+//    public void addTopic(Topic topic) {
+//        this.topics.add(topic);
+//        topic.setUser(this);
+//    }
+//    
+//    public void addEntry(Entry entry) {
+//    	this.entries.add(entry);
+//    	entry.setUser(this);
+//    }
     
     //----------------------------------------
     

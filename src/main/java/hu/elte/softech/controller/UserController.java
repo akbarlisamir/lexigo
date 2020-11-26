@@ -19,8 +19,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 public class UserController {
-	@Autowired
-	private TstRepo tstr;
 	
 	@Autowired
 	private UserService us;
@@ -53,12 +51,6 @@ public class UserController {
 	@RequestMapping(method=RequestMethod.DELETE,path="/user/delete/{id}")
 	public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
 	    return us.deleteUser(id);
-	}
-	
-	@RequestMapping(method=RequestMethod.DELETE,path="/tst/delete/{id}")
-	public ResponseEntity<Void> deleteTst(@PathVariable Long id) {
-	    tstr.deleteById(id);
-	    return ResponseEntity.noContent().build();
 	}
 
 }

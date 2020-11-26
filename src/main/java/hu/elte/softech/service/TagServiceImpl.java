@@ -17,16 +17,16 @@ import hu.elte.softech.repository.TagRepository;
 public class TagServiceImpl implements TagService{
 
 	@Autowired
-	private TagRepository tr;
+	private TagRepository tgr;
 	
 	@Override
 	public List<Tag> allTags() {
-		return tr.findAll();
+		return tgr.findAll();
 	}
 
 	@Override
 	public Tag findOneTag(Long id) {
-		Optional<Tag> tag = tr.findById(id);
+		Optional<Tag> tag = tgr.findById(id);
 		if(!tag.isPresent()) {
 			//throw new UserNotFoundException("id-" + id);
 		}
@@ -36,7 +36,7 @@ public class TagServiceImpl implements TagService{
 	@Override
 	public Set<Topic> findOneTagTopics(Long id) {
 		Set<Topic> ts = new HashSet<Topic>();
-		Optional<Tag> tag = tr.findById(id);
+		Optional<Tag> tag = tgr.findById(id);
 		if(tag.isPresent()) {
 			return tag.get().getTopics();
 		}
@@ -45,7 +45,8 @@ public class TagServiceImpl implements TagService{
 
 	@Override
 	public ResponseEntity<Void> deleteTag(Long id) {
-		tr.deleteById(id);
+		tgr.del(id);
+		tgr.deleteById(id);
 	    
 	    return ResponseEntity.noContent().build();
 	}
