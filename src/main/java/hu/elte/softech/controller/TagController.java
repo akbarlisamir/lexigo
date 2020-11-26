@@ -37,6 +37,11 @@ public class TagController {
 		//return tr.findAll();
 	}
 	
+	@RequestMapping(method=RequestMethod.POST, path="/tag/one")
+	public Tag newTag(@RequestBody Tag nTg) {
+		return ts.createTag(nTg);
+	}
+	
 	@RequestMapping(method=RequestMethod.GET, path="/tag/one/{id}")
 	public Tag findOneTag(@PathVariable Long id) {
 		return ts.findOneTag(id);

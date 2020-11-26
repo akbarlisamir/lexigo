@@ -50,20 +50,6 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public ResponseEntity<Void> deleteUser(Long id) {
-		User u = ur.findById(id).get();
-		for(Topic t: u.getTopics()) {
-			ts.deleteTopic(t.getId());
-		}
-		for(Entry e: u.getEntries()) {
-			es.deleteEntry(e.getId());
-		}
-		ur.deleteById(id);
-	    
-	    return ResponseEntity.noContent().build();
-	}
-
-	@Override
 	public User findOneUser(String username) {
 		User user = ur.findUserByUsername(username);
 		if(user == null) {
@@ -78,5 +64,23 @@ public class UserServiceImpl implements UserService{
 	}
 	
 	
+	
+	
+	//DELETE
+
+
+	@Override
+	public ResponseEntity<Void> deleteUser(Long id) {
+//		User u = ur.findById(id).get();
+//		for(Topic t: u.getTopics()) {
+//			ts.deleteTopic(t.getId());
+//		}
+//		for(Entry e: u.getEntries()) {
+//			es.deleteEntry(e.getId());
+//		}
+//		ur.deleteById(id);
+	    
+	    return ResponseEntity.noContent().build();
+	}
 
 }

@@ -35,14 +35,6 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
     
-    @OneToMany(fetch = FetchType.LAZY,mappedBy="user",cascade=CascadeType.ALL)
-    @JsonIgnore
-    private List<Topic> topics;
-    
-    @OneToMany(fetch = FetchType.LAZY,mappedBy="user",cascade=CascadeType.ALL)
-    @JsonIgnore
-    private List<Entry> entries;
-    
     @ManyToMany(fetch = FetchType.LAZY,cascade={CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinTable(name = "Favorite", 
     		joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id",
@@ -63,6 +55,20 @@ public class User {
     
     @OneToMany(fetch = FetchType.LAZY,mappedBy="user",cascade=CascadeType.ALL)
     private List<Ranking> rankings;
+    
+    
+    
+    
+    
+//    @OneToMany(fetch = FetchType.LAZY,mappedBy="user",cascade=CascadeType.ALL)
+//    @JsonIgnore
+//    private List<Topic> topics;
+    
+//    @OneToMany(fetch = FetchType.LAZY,mappedBy="user",cascade=CascadeType.ALL)
+//    @JsonIgnore
+//    private List<Entry> entries;
+    
+    
     
     //---------------------------------------
     

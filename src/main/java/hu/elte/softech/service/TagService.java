@@ -17,5 +17,7 @@ public interface TagService {
 	Set<Topic> findOneTagTopics(Long id);
 	
 	ResponseEntity<Void> deleteTag(Long id);
+	
+	Tag createTag(Tag tag);
 
 }

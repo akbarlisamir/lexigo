@@ -1,5 +1,6 @@
 package hu.elte.softech.service;
 
+import java.net.URI;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -8,9 +9,11 @@ import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import hu.elte.softech.entity.Tag;
 import hu.elte.softech.entity.Topic;
+import hu.elte.softech.entity.User;
 import hu.elte.softech.repository.TagRepository;
 
 @Service
@@ -49,6 +52,11 @@ public class TagServiceImpl implements TagService{
 		tgr.deleteById(id);
 	    
 	    return ResponseEntity.noContent().build();
+	}
+
+	@Override
+	public Tag createTag(Tag tag) {
+		return tgr.save(tag);
 	}
 
 }
