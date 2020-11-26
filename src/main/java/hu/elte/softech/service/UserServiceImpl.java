@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import hu.elte.softech.entity.Topic;
 import hu.elte.softech.entity.User;
 import hu.elte.softech.repository.UserRepository;
 
@@ -16,6 +17,9 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private UserRepository ur;
+	
+	@Autowired
+	private TopicService ts;
 
 	@Override
 	public ResponseEntity<Object> newUser(User nU) {
@@ -43,6 +47,10 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public ResponseEntity<Void> deleteUser(Long id) {
+		User u = ur.findById(id).get();
+		for(Topic t: u.getTopics()) {
+			ts.deleteTopic(t.getId());
+		}
 		ur.deleteById(id);
 	    
 	    return ResponseEntity.noContent().build();

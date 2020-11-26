@@ -74,6 +74,7 @@ public class TopicServiceImpl implements TopicService {
 	
 	@Override
 	public ResponseEntity<Void> deleteTopic(Long id) {
+		tr.del(id);
 		tr.deleteById(id);
 	    
 	    return ResponseEntity.noContent().build();

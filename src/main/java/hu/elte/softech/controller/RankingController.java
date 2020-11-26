@@ -20,7 +20,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 public class RankingController {
 	
 	@Autowired
-	private RankingRepository er;
+	private RankingRepository rr;
 	
 //	@RequestMapping(method=RequestMethod.GET, path="/entrys")
 //	public List<Entry> retrieveAllEntrys() {

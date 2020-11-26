@@ -57,15 +57,15 @@ public class Entry {
     @ManyToOne
     @JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
     private User user;
-    
+   
     @ManyToOne(fetch=FetchType.EAGER)
     @JsonIgnore
     private Topic topic;
-    
+  
     @ManyToMany(fetch=FetchType.LAZY,mappedBy = "favs",cascade=CascadeType.ALL)
     @JsonIgnore
     private Set<User> userfavs;
-    
+   
     @OneToMany(fetch=FetchType.LAZY,mappedBy="entry",cascade=CascadeType.ALL)
     @JsonIgnore
     private List<Ranking> rankings;

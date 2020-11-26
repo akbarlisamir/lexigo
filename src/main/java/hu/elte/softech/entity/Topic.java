@@ -16,6 +16,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PostLoad;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -33,14 +36,6 @@ public class Topic implements Serializable{
 
     @Column(nullable = false, unique = true)
     private String value;
-
-//    @Column(nullable = false)
-//    private Date created;
-
-    //@OldOne
-//    @ManyToOne(fetch=FetchType.EAGER)
-//    @JsonIgnore
-//    private User user;
     
     @ManyToOne
     @JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
@@ -50,7 +45,7 @@ public class Topic implements Serializable{
     @JsonIgnore
     private List<Entry> entries;
     
-    @ManyToMany(fetch=FetchType.LAZY,cascade=CascadeType.ALL)
+    @ManyToMany(fetch=FetchType.LAZY,cascade={CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinTable(name = "TopicTag", 
     		  joinColumns = {@JoinColumn(name = "topic_id", referencedColumnName = "id",
               nullable = false, updatable = false)}, 
@@ -59,9 +54,10 @@ public class Topic implements Serializable{
     @JsonIgnore
     private Set<Tag> tags;
     
-    @ManyToMany(fetch=FetchType.LAZY,mappedBy = "followtopics",cascade=CascadeType.ALL)
-    @JsonIgnore
-    private Set<User> userfollowtopics;
+    @ManyToMany(fetch=FetchType.LAZY,mappedBy = "followtopics", cascade = {CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH})
+    @Fetch(value=FetchMode.SELECT)
+	@JsonIgnore
+	private Set<User> userfollowtopics;
     
     @PostLoad
     private void postLoadFunction(){
@@ -69,4 +65,17 @@ public class Topic implements Serializable{
     	//log.info("BankBranch PostLoad method called");
     }
     
+    
+    
+//  @Column(nullable = false)
+//  private Date created;
+
+  //@OldOne
+//  @ManyToOne(fetch=FetchType.EAGER)
+//  @JsonIgnore
+//  private User user;
+    
+//    @ManyToMany(fetch=FetchType.LAZY,mappedBy = "followtopics",cascade=CascadeType.ALL)
+//    @JsonIgnore
+//    private Set<User> userfollowtopics;
 }
