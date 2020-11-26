@@ -14,9 +14,7 @@
 	<name>LexiGo</name>
 	<description>LexiGo Project for Software Technology</description>
 
-	<properties>
-		<java.version>11</java.version>
-	</properties>
+	
 
 	<dependencies>
 		<dependency>
