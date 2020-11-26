@@ -62,9 +62,9 @@ public class Entry {
 	@JsonIgnore
     private Set<User> userfavs;
    
-    @OneToMany(fetch=FetchType.LAZY,mappedBy="entry",cascade=CascadeType.ALL)
-    @JsonIgnore
-    private List<Ranking> rankings;
+//    @OneToMany(fetch=FetchType.LAZY,mappedBy="entry",cascade=CascadeType.ALL)
+//    @JsonIgnore
+//    private List<Ranking> rankings;
     
 //    @Column(nullable = false, updatable = false)
 //    @CreatedDate

@@ -45,7 +45,11 @@ public class TopicController {
         return ts.updateTopicOfUser(userId, topicId, topicRequest);
     }
 	
-	
+	//DELETE
+	@RequestMapping(method=RequestMethod.DELETE,path="/topic/delete/{topicId}")
+	public ResponseEntity<Void> deleteTopic(@PathVariable Long topicId) {
+	    return ts.deleteTopic(topicId);
+	}
 	
 	
 	

@@ -73,20 +73,39 @@ public class EntryController {
                                  @RequestBody Entry entryRequest) {
         return es.updateEntryOfTopic(topicId, entryId, entryRequest);
     }
-
-    @RequestMapping(method=RequestMethod.DELETE,path="/topic/{topicId}/entry/{entryId}")
-    public ResponseEntity<?> deleteEntryOfTopic(@PathVariable (value = "topicId") Long topicId,
-                              @PathVariable (value = "entryId") Long entryId) {
-        return es.deleteEntryOfTopic(topicId, entryId);
-    }
-
-    @RequestMapping(method=RequestMethod.DELETE,path="/user/{userId}/entry/{entryId}")
-    public ResponseEntity<?> deleteEntryOfUser(@PathVariable (value = "userId") Long userId,
-                              @PathVariable (value = "entryId") Long entryId) {
-        return es.deleteEntryOfUser(userId, entryId);
-    }
+	
+	//DELETE
+	@RequestMapping(method=RequestMethod.DELETE,path="/entry/delete/{entryId}")
+	public ResponseEntity<Void> deleteEntry(@PathVariable Long entryId) {
+	    return es.deleteEntry(entryId);
+	}
 	
 	
+	
+	
+	
+
+//    @RequestMapping(method=RequestMethod.DELETE,path="/topic/{topicId}/entry/{entryId}")
+//    public ResponseEntity<?> deleteEntryOfTopic(@PathVariable (value = "topicId") Long topicId,
+//                              @PathVariable (value = "entryId") Long entryId) {
+//        return es.deleteEntryOfTopic(topicId, entryId);
+//    }
+//
+//    @RequestMapping(method=RequestMethod.DELETE,path="/user/{userId}/entry/{entryId}")
+//    public ResponseEntity<?> deleteEntryOfUser(@PathVariable (value = "userId") Long userId,
+//                              @PathVariable (value = "entryId") Long entryId) {
+//        return es.deleteEntryOfUser(userId, entryId);
+//    }
+	
+	
+    
+    //entrydetailed
+    
+    @RequestMapping(method=RequestMethod.GET, path="/entrys/detail")
+	public List<EntryRankTopic> allEDetailed() {
+		return es.findAllEntrysInDetailedForm();
+	}
+    
 	
 	
 //	@RequestMapping(method=RequestMethod.GET, path="/entry/{id}")

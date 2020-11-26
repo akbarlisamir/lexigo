@@ -11,6 +11,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import hu.elte.softech.entity.Entry;
 import hu.elte.softech.entity.Topic;
 import hu.elte.softech.entity.User;
+import hu.elte.softech.repository.EntryRepository;
+import hu.elte.softech.repository.RankingRepository;
+import hu.elte.softech.repository.TopicRepository;
 import hu.elte.softech.repository.UserRepository;
 
 @Service
@@ -18,6 +21,15 @@ public class UserServiceImpl implements UserService{
 	
 	@Autowired
 	private UserRepository ur;
+	
+	@Autowired
+	private RankingRepository rr;	
+
+	@Autowired
+	private TopicRepository tpr;
+
+	@Autowired
+	private EntryRepository er;
 	
 	@Autowired
 	private TopicService ts;
@@ -67,10 +79,35 @@ public class UserServiceImpl implements UserService{
 	
 	
 	//DELETE
-
+	@Override
+	public ResponseEntity<?> deleteRankByUserEntry(Long userId, Long entryId) {
+		rr.delFromRankingByUserEntry(userId, entryId);
+		return ResponseEntity.noContent().build();
+	}
 
 	@Override
-	public ResponseEntity<Void> deleteUser(Long id) {
+	public ResponseEntity<Void> deleteUser(Long userId) {
+		User user = ur.findById(userId).get();
+		List<Entry> listEntry = er.findAllForUser(user);
+		for(Entry e: listEntry) {
+			es.deleteEntry(e.getId());
+		}
+		rr.delFromRankingByUser(userId);
+		tpr.delFromFollowTopicByUser(userId);
+		er.delFromFavoriteByUser(userId);
+		er.delFromEntryByUser(userId);
+		List<Topic> listTopic = tpr.findAllForUser(user);
+		for(Topic t: listTopic) {
+			ts.deleteTopic(t.getId());
+		}
+		ur.deleteById(userId);
+		return ResponseEntity.noContent().build();
+	}
+	
+	
+	
+//	@Override
+//	public ResponseEntity<Void> deleteUser(Long id) {
 //		User u = ur.findById(id).get();
 //		for(Topic t: u.getTopics()) {
 //			ts.deleteTopic(t.getId());
@@ -80,7 +117,7 @@ public class UserServiceImpl implements UserService{
 //		}
 //		ur.deleteById(id);
 	    
-	    return ResponseEntity.noContent().build();
-	}
+//	    return ResponseEntity.noContent().build();
+//	}
 
 }

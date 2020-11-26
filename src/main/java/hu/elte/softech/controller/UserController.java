@@ -38,9 +38,10 @@ public class UserController {
 	    return us.editUser(eU, id);
 	  }
 	
-	@RequestMapping(method=RequestMethod.DELETE,path="/user/delete/{id}")
-	public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-	    return us.deleteUser(id);
+	//DELETE
+	@RequestMapping(method=RequestMethod.DELETE,path="/user/delete/{userId}")
+	public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
+	    return us.deleteUser(userId);
 	}
 
 }
