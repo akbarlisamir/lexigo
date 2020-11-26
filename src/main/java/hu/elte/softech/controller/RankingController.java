@@ -19,8 +19,14 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 @RestController
 public class RankingController {
 	
-	@Autowired
-	private RankingRepository rr;
+//	@Autowired
+//	private RankingRepository rr;
+//	private RankingService rs;
+	
+//	@RequestMapping(method=RequestMethod.POST, path="/ranking/one")
+//	public Topic newTopic(@RequestBody Topic nTp) {
+//		return ts.createTopic(nTp);
+//	}
 	
 //	@RequestMapping(method=RequestMethod.GET, path="/entrys")
 //	public List<Entry> retrieveAllEntrys() {

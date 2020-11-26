@@ -6,7 +6,10 @@ import hu.elte.softech.entity.User;
 import hu.elte.softech.entity.Topic;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,6 +19,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface EntryRepository extends JpaRepository<Entry,Long> {
+	
+	Page<Entry> findByUserId(Long userId, Pageable pageable);
+	
+	Page<Entry> findByTopicId(Long topicId, Pageable pageable);
+	
+    Optional<Entry> findByIdAndUserId(Long id, Long userId);
+    
+    Optional<Entry> findByIdAndTopicId(Long id, Long topicId);
 
 	@Query("SELECT e FROM Entry e WHERE e.user = ?1")
 	public List<Entry> findAllForUser(User user);

@@ -18,6 +18,8 @@ import javax.persistence.PostLoad;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -37,13 +39,19 @@ public class Topic implements Serializable{
     @Column(nullable = false, unique = true)
     private String value;
     
-    @ManyToOne
-    @JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private User user;
     
-    @OneToMany(fetch=FetchType.LAZY,mappedBy="topic",cascade=CascadeType.ALL)
-    @JsonIgnore
-    private List<Entry> entries;
+//    @ManyToOne
+//    @JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
+//    private User user;
+//    
+//    @OneToMany(fetch=FetchType.LAZY,mappedBy="topic",cascade=CascadeType.ALL)
+//    @JsonIgnore
+//    private List<Entry> entries;
     
     @ManyToMany(fetch=FetchType.LAZY,cascade={CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinTable(name = "TopicTag", 
