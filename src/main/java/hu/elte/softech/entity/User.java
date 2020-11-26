@@ -43,10 +43,12 @@ public class User {
     @JsonIgnore
     private List<Entry> entries;
     
-    @ManyToMany(fetch = FetchType.LAZY,cascade=CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY,cascade={CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinTable(name = "Favorite", 
-    		  joinColumns = @JoinColumn(name = "user_id"), 
-    		  inverseJoinColumns = @JoinColumn(name = "entry_id"))
+    		joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id",
+            nullable = false, updatable = false)}, 
+  		  inverseJoinColumns = {@JoinColumn(name = "entry_id", referencedColumnName = "id",
+            nullable = false, updatable = false)})
     @JsonIgnore
     private Set<Entry> favs;
     

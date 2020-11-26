@@ -62,6 +62,7 @@ public class EntryServiceImpl implements EntryService {
 
 	@Override
 	public ResponseEntity<Void> deleteEntry(Long id) {
+		er.del(id);
 		er.deleteById(id);
 	    
 	    return ResponseEntity.noContent().build();
