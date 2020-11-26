@@ -18,6 +18,8 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -62,8 +64,9 @@ public class Entry {
     @JsonIgnore
     private Topic topic;
   
-    @ManyToMany(fetch=FetchType.LAZY,mappedBy = "favs",cascade=CascadeType.ALL)
-    @JsonIgnore
+    @ManyToMany(fetch=FetchType.LAZY,mappedBy = "favs", cascade = {CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH})
+    @Fetch(value=FetchMode.SELECT)
+	@JsonIgnore
     private Set<User> userfavs;
    
     @OneToMany(fetch=FetchType.LAZY,mappedBy="entry",cascade=CascadeType.ALL)
