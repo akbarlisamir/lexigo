@@ -1,20 +1,24 @@
 package hu.elte.softech.entity;
 
-import java.io.Serializable;
+import java.util.List;
 
 import lombok.Data;
 
 @Data
-public class EntryRankTopic{
+public class EntryWD {
 
 	public Entry entry;
 
-	public String topicName;
+	public Topic topic;
+
+	public List<Tag> tags;
 
 	public int rankUp;
 
 	public int rankDown;
 
 	public User user;
+
+	public int fav;
 
 }

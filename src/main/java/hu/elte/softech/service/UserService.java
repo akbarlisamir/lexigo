@@ -5,19 +5,34 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 
 import hu.elte.softech.entity.User;
+import hu.elte.softech.entity.UserTopicsAndEntrysAndFavs;
 
 public interface UserService {
-	
-	ResponseEntity<Object> newUser(User nU);
-	
-	User editUser(User eU, Long id);
-	
-	ResponseEntity<Void> deleteUser(Long userId);
-	
-	User findOneUser(String username);
-	
-	List<User> allUsers();
-	
-	ResponseEntity<?> deleteRankByUserEntry(Long userId, Long entryId);
 
+	//GET Users
+	List<User> getAllUsers();
+
+	//GET Users with Details
+	List<UserTopicsAndEntrysAndFavs> getAllUsersWD();
+
+	//GET User By Username with Details
+	UserTopicsAndEntrysAndFavs findOneUserByUsernameWD(String username);
+
+	//GET User By UserId with Details
+	UserTopicsAndEntrysAndFavs findOneUserByUserIdWD(Long userId);
+
+	//GET User By Username
+	User findOneUserByUsername(String username);
+
+	//GET User By UserId
+	User findOneUserByUserId(Long userId);
+
+	//POST User
+	ResponseEntity<Object> createUser(User nU);
+
+	//EDIT User
+	User editUser(User eU, Long id);
+
+	//DELETE User
+	ResponseEntity<Void> deleteUser(Long userId);
 }

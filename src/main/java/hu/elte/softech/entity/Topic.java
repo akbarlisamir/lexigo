@@ -13,24 +13,21 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.PostLoad;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Data
 @Entity
-public class Topic implements Serializable{
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class Topic{
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -38,43 +35,35 @@ public class Topic implements Serializable{
 
     @Column(nullable = false, unique = true)
     private String value;
-    
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private User user;
-    
-//    @ManyToOne
-//    @JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
-//    private User user;
-//    
-//    @OneToMany(fetch=FetchType.LAZY,mappedBy="topic",cascade=CascadeType.ALL)
-//    @JsonIgnore
-//    private List<Entry> entries;
-    
+
     @ManyToMany(fetch=FetchType.LAZY,cascade={CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH})
-    @JoinTable(name = "TopicTag", 
+    @JoinTable(name = "TopicTag",
     		  joinColumns = {@JoinColumn(name = "topic_id", referencedColumnName = "id",
-              nullable = false, updatable = false)}, 
+              nullable = false, updatable = false)},
     		  inverseJoinColumns = {@JoinColumn(name = "tag_id", referencedColumnName = "id",
               nullable = false, updatable = false)})
     @JsonIgnore
     private Set<Tag> tags;
-    
+
     @ManyToMany(fetch=FetchType.LAZY,mappedBy = "followtopics", cascade = {CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH})
     @Fetch(value=FetchMode.SELECT)
 	@JsonIgnore
 	private Set<User> userfollowtopics;
-    
-    @PostLoad
-    private void postLoadFunction(){
-        System.out.println("Topic.java called!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-    	//log.info("BankBranch PostLoad method called");
-    }
-    
-    
-    
+
+//    @PostLoad
+//    private void postLoadFunction(){
+//        System.out.println("Topic.java called!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+//    	//log.info("BankBranch PostLoad method called");
+//    }
+
+
+
 //  @Column(nullable = false)
 //  private Date created;
 
@@ -82,7 +71,7 @@ public class Topic implements Serializable{
 //  @ManyToOne(fetch=FetchType.EAGER)
 //  @JsonIgnore
 //  private User user;
-    
+
 //    @ManyToMany(fetch=FetchType.LAZY,mappedBy = "followtopics",cascade=CascadeType.ALL)
 //    @JsonIgnore
 //    private Set<User> userfollowtopics;

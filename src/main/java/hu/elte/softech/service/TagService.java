@@ -6,18 +6,35 @@ import java.util.Set;
 import org.springframework.http.ResponseEntity;
 
 import hu.elte.softech.entity.Tag;
-import hu.elte.softech.entity.Topic;
+import hu.elte.softech.entity.TopicTag;
+import hu.elte.softech.entity.TopicUserTagsEntrys;
 
 public interface TagService {
-	
-	List<Tag> allTags();
-	
-	Tag findOneTag(Long id);
-	
-	Set<Topic> findOneTagTopics(Long id);
-	
-	ResponseEntity<Void> deleteTag(Long id);
-	
-	Tag createTag(Tag tag);
+
+	//GET Tags
+	List<Tag> findAllTags();
+
+	//POST Tag
+	Tag createTag(Tag tagRequest);
+
+	//EDIT Tag
+	Tag editTag(Long tagId, Tag tagRequest);
+
+	//GET Tag
+	Tag findOneTag(Long tagId);
+
+	//GET Topics By TagId
+	List<TopicUserTagsEntrys> findOneTagTopics(Long tagId);
+
+	//DELETE Tag
+	ResponseEntity<Void> deleteTag(Long tagId);
+
+	//POST Tags
+	Set<Tag> createTags(Set<Tag> tagsRequest);
+
+	//POST Tags
+	TopicTag createTopicTag(Long topicId, Long tagId);
+
+	List<String> findTagListOfTopic(Long topicId);
 
 }
