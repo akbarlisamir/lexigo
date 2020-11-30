@@ -1,6 +1,7 @@
 package hu.elte.softech.service;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import hu.elte.softech.entity.Entry;
 import hu.elte.softech.entity.Topic;
 import hu.elte.softech.entity.User;
+import hu.elte.softech.entity.UserTopicsAndEntrysAndFavs;
 import hu.elte.softech.repository.EntryRepository;
 import hu.elte.softech.repository.RankingRepository;
 import hu.elte.softech.repository.TopicRepository;
@@ -18,52 +20,61 @@ import hu.elte.softech.repository.UserRepository;
 
 @Service
 public class UserServiceImpl implements UserService{
-	
-	@Autowired
-	private UserRepository ur;
-	
-	@Autowired
-	private RankingRepository rr;	
 
 	@Autowired
-	private TopicRepository tpr;
+	private UserRepository userR;
 
 	@Autowired
-	private EntryRepository er;
-	
+	private RankingRepository rankingR;
+
 	@Autowired
-	private TopicService ts;
-	
+	private TopicRepository topicR;
+
 	@Autowired
-	private EntryService es;
+	private EntryRepository entryR;
+
+	@Autowired
+	private TopicService topicS;
+
+	@Autowired
+	private EntryService entryS;
 
 	@Override
-	public ResponseEntity<Object> newUser(User nU) {
-		User savedUser = ur.save(nU);
-		
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-			.buildAndExpand(savedUser.getId()).toUri();
-		return ResponseEntity.created(location).build();
+	public List<User> getAllUsers() {
+		return userR.findAll();
 	}
 
 	@Override
-	public User editUser(User eU, Long id) {
-		return ur.findById(id).map(user -> {
-	    	  user.setUsername(eU.getUsername());
-	    	  user.setEmail(eU.getEmail());
-	    	  user.setPassword(eU.getPassword());
-	    	  user.setRole(eU.getRole());
-	    	  return ur.save(user);
-	      })
-	      .orElseGet(() -> {
-	    	  eU.setId(id);
-	    	  return ur.save(eU);
-	      });
+	public List<UserTopicsAndEntrysAndFavs> getAllUsersWD() {
+		List<UserTopicsAndEntrysAndFavs> lstUTEF = new ArrayList<UserTopicsAndEntrysAndFavs>();
+		List<User> users = userR.findAll();
+		for(User u : users) {
+			UserTopicsAndEntrysAndFavs utef = new UserTopicsAndEntrysAndFavs();
+			utef.setUser(u);
+//			utef.setEntrys(entrys);
+//			utef.setTopics(topics);
+//			utef.setFavs(favs);
+			lstUTEF.add(utef);
+		}
+
+		return lstUTEF;
 	}
 
 	@Override
-	public User findOneUser(String username) {
-		User user = ur.findUserByUsername(username);
+	public UserTopicsAndEntrysAndFavs findOneUserByUsernameWD(String username) {
+		User user = userR.findUserByUsername(username);
+		return null;
+	}
+
+	@Override
+	public UserTopicsAndEntrysAndFavs findOneUserByUserIdWD(Long userId) {
+		User user = userR.findById(userId).get();
+		return null;
+	}
+
+	@Override
+	public User findOneUserByUsername(String username) {
+		User user = userR.findUserByUsername(username);
 		if(user == null) {
 			//throw new UserNotFoundException("id-" + id);
 		}
@@ -71,53 +82,52 @@ public class UserServiceImpl implements UserService{
 	}
 
 	@Override
-	public List<User> allUsers() {
-		return ur.findAll();
+	public User findOneUserByUserId(Long userId) {
+		User user = userR.findById(userId).get();
+		return user;
 	}
-	
-	
-	
-	
-	//DELETE
+
 	@Override
-	public ResponseEntity<?> deleteRankByUserEntry(Long userId, Long entryId) {
-		rr.delFromRankingByUserEntry(userId, entryId);
-		return ResponseEntity.noContent().build();
+	public ResponseEntity<Object> createUser(User nU) {
+		User savedUser = userR.save(nU);
+
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+			.buildAndExpand(savedUser.getId()).toUri();
+		return ResponseEntity.created(location).build();
+	}
+
+	@Override
+	public User editUser(User eU, Long id) {
+		return userR.findById(id).map(user -> {
+	    	  user.setUsername(eU.getUsername());
+	    	  user.setEmail(eU.getEmail());
+	    	  user.setPassword(eU.getPassword());
+	    	  user.setRole(eU.getRole());
+	    	  return userR.save(user);
+	      })
+	      .orElseGet(() -> {
+	    	  eU.setId(id);
+	    	  return userR.save(eU);
+	      });
 	}
 
 	@Override
 	public ResponseEntity<Void> deleteUser(Long userId) {
-		User user = ur.findById(userId).get();
-		List<Entry> listEntry = er.findAllForUser(user);
+		User user = userR.findById(userId).get();
+		List<Entry> listEntry = entryR.findAllForUser(user);
 		for(Entry e: listEntry) {
-			es.deleteEntry(e.getId());
+			entryS.deleteEntry(e.getId());
 		}
-		rr.delFromRankingByUser(userId);
-		tpr.delFromFollowTopicByUser(userId);
-		er.delFromFavoriteByUser(userId);
-		er.delFromEntryByUser(userId);
-		List<Topic> listTopic = tpr.findAllForUser(user);
+		rankingR.delFromRankingByUser(userId);
+		topicR.delFromFollowTopicByUser(userId);
+		entryR.delFromFavoriteByUser(userId);
+		entryR.delFromEntryByUser(userId);
+		List<Topic> listTopic = topicR.findTopicListByUser(user);
 		for(Topic t: listTopic) {
-			ts.deleteTopic(t.getId());
+			topicS.deleteTopic(t.getId());
 		}
-		ur.deleteById(userId);
+		userR.deleteById(userId);
 		return ResponseEntity.noContent().build();
 	}
-	
-	
-	
-//	@Override
-//	public ResponseEntity<Void> deleteUser(Long id) {
-//		User u = ur.findById(id).get();
-//		for(Topic t: u.getTopics()) {
-//			ts.deleteTopic(t.getId());
-//		}
-//		for(Entry e: u.getEntries()) {
-//			es.deleteEntry(e.getId());
-//		}
-//		ur.deleteById(id);
-	    
-//	    return ResponseEntity.noContent().build();
-//	}
 
 }

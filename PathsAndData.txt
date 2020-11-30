@@ -1,0 +1,57 @@
+**FOR LOGIN: GET User By Username  ->  /login/user/{username}
+GET Users With Details  ->  /users/get
+GET Users  ->  /users
+GET User By Username With Details  ->  /user/{username}/get
+GET User By UserId With Details  ->  /user/{userId}/get
+GET User By UserId  ->  /user/{userId}
+POST User  ->  /register/user
+EDIT User  ->  /user/edit/{id}
+DELETE User  ->  /user/delete/{userId}
+
+
+POST Tag  ->  /tag
+GET Tags  ->  /tags
+GET Tags  ->  /tag/{tagId}
+EDIT Tag  ->  /tag/edit/{tagId}
+DELETE Tag  ->  /tag/delete/{tagId}
+GET Topics By TagId  ->  tag/{tagId}/topics
+
+
+GET Topics  ->  /topics
+GET Topic With Details  ->  /topic/{topicId}/get
+GET Topic  ->  /topic/{topicId}
+GET Topic With Details  ->  /topic/{topicId}/get
+GET Topics By UserId  ->  /user/{userId}/topics
+POST Topic   ->  /{userId}/topic
+EDIT Topic  ->  /topic/edit/{topicId}
+DELETE Topic  ->  topic/delete/{topicId}
+
+
+POST FollowTopic  -> /{userId}/{topicId}/follow
+DELETE FollowTopic  -> /{userId}/{topicId}/follow
+GET FollowTopics By User  -> /user/{userId}/topics/follow
+
+POST FavEntry  -> /{userId}/{entryId}/fav
+DELETE FavEntry  -> /{userId}/{entryId}/fav
+GET FavEntrys By User  -> /user/{userId}/entrys/fav
+
+
+GET Entrys With Details  -> /entrys/get
+GET Entrys  ->  /entrys
+GET Entrys By UserId  ->  /user/{userId}/entrys
+GET Entrys By TopicId  ->  /topic/{topicId}/entrys
+POST Entry  ->  /{userId}/{topicId}/entry
+DELETE Entry  ->  /entry/delete/{entryId}
+EDIT Entry  ->  /entry/edit/{entryId}
+  ->  
+  ->  
+  ->  
+  ->  
+
+  ->  
+  ->  
+  ->  
+  ->  
+  ->  
+  ->  
+  ->  

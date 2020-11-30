@@ -5,8 +5,6 @@ import hu.elte.softech.entity.*;
 import hu.elte.softech.service.TopicService;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,58 +15,109 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class TopicController {
-	
+
 	@Autowired
-	private TopicService ts;
-	
+	private TopicService topicS;
+
+	//GET Topics
 	@RequestMapping(method=RequestMethod.GET, path="/topics")
 	public List<Topic> retrieveAllTopics() {
-		return ts.allTopics();
+		return topicS.allTopics();
 	}
-	
+
+	//GET Topics With Details
+	@RequestMapping(method=RequestMethod.GET, path="/topics/get")
+	public List<TopicUserTagsEntrys> retrieveAllTopicsWD() {
+		return topicS.allTopicsWD();
+	}
+
+	//GET Topic
+	@RequestMapping(method=RequestMethod.GET, path="/topic/{topicId}")
+	public Topic retrieveOneTopic(@PathVariable (value = "topicId") Long topicId) {
+		return topicS.getTopic(topicId);
+	}
+
+	//GET Topic With Details
+	@RequestMapping(method=RequestMethod.GET, path="/topic/{topicId}/get")
+	public TopicUserTagsEntrys retrieveOneTopicsWD(@PathVariable (value = "topicId") Long topicId) {
+		return topicS.getTopicWD(topicId);
+	}
+
+	//GET Topics Of User By Username
+//	@RequestMapping(method=RequestMethod.GET, path="/user/{username}/topics")
+//	public List<Topic> getOneUserTopicsByUserId(@PathVariable String username) {
+//		return topicS.getOneUserTopicsByUsername(username);
+//	}
+
+	//GET Topics Of User By UserId
 	@RequestMapping(method=RequestMethod.GET, path="/user/{userId}/topics")
-	public Page<Topic> getAllTopicsByUserId(@PathVariable (value = "userId") Long userId,
-                                                Pageable pageable) {
-        return ts.getTopicsByUser(userId, pageable);
+	public List<Topic> getAllTopicsByUserId(@PathVariable (value = "userId") Long userId) {
+        return topicS.getTopicsByUser(userId);
     }
-	
-	@RequestMapping(method=RequestMethod.POST, path="/user/{userId}/topic")
-    public Topic createTopic(@PathVariable (value = "userId") Long userId,
-    		@RequestBody Topic topic) {
-        return ts.createTopicOfUser(userId, topic);
+
+	//POST Topic
+	@RequestMapping(method=RequestMethod.POST, path="/{userId}/topic")
+	public TopicWD createTopic(@PathVariable (value = "userId") Long userId,
+			@RequestBody TopicWD topicRequest) {
+		System.out.println(topicRequest.getTopic().getValue());
+	    return topicS.createTopicOfUser(userId, topicRequest);
+	}
+
+	//EDIT Topic
+	@RequestMapping(method=RequestMethod.PUT,path="/topic/edit/{topicId}")
+    public TopicWD editTopicOfUser(@PathVariable (value = "topicId") Long topicId,
+                                 @RequestBody TopicWD topicRequest) {
+        return topicS.editTopicOfUser(topicId, topicRequest);
     }
-	
-	@RequestMapping(method=RequestMethod.PUT,path="/user/{userId}/topic/{topicId}")
-    public Topic updateTopicOfUser(@PathVariable (value = "userId") Long userId,
-                                 @PathVariable (value = "topicId") Long topicId,
-                                 @RequestBody Topic topicRequest) {
-        return ts.updateTopicOfUser(userId, topicId, topicRequest);
-    }
-	
-	//DELETE
+
+	//DELETE Topic
 	@RequestMapping(method=RequestMethod.DELETE,path="/topic/delete/{topicId}")
 	public ResponseEntity<Void> deleteTopic(@PathVariable Long topicId) {
-	    return ts.deleteTopic(topicId);
+	    return topicS.deleteTopic(topicId);
 	}
-	
-	
-	
-	
-	
-	
+
+	//POST FollowTopic
+	@RequestMapping(method=RequestMethod.POST,path="/{userId}/{topicId}/follow")
+	public List<Topic> followTopic(@PathVariable (value = "userId") Long userId,
+			@PathVariable (value = "topicId") Long topicId) {
+		return topicS.followTopic(userId, topicId);
+	}
+
+	//DELETE FollowTopic
+	@RequestMapping(method=RequestMethod.DELETE,path="/{userId}/{topicId}/follow")
+	public List<Topic> unfollowTopic(@PathVariable (value = "userId") Long userId,
+			@PathVariable (value = "topicId") Long topicId) {
+		return topicS.unfollowTopic(userId, topicId);
+	}
+
+	//GET Topics Of User By UserId
+	@RequestMapping(method=RequestMethod.GET, path="/user/{userId}/topics/follow")
+	public List<Topic> getAllFollowTopicsByUser(@PathVariable (value = "userId") Long userId) {
+        return topicS.getFollowTopicsByUser(userId);
+    }
+
+
+
+
+
+
+
+
+
+
 //	@RequestMapping(method=RequestMethod.POST, path="/topic/one")
 //	public Topic newTopic(@RequestBody Topic nTp) {
-//		return ts.createTopic(nTp);
+//		return tagS.createTopic(nTp);
 //	}
-//	
+//
 //	@RequestMapping(method=RequestMethod.POST, path="/topic")
 //	public ResponseEntity<Object> newTopic(@RequestBody TopicDTO nTDTO) {
-//		return ts.createTopic(nTDTO);
+//		return tagS.createTopic(nTDTO);
 //	}
-//	
+//
 //	@RequestMapping(method=RequestMethod.DELETE,path="/topic/delete/{id}")
 //	public ResponseEntity<Void> deleteTopic(@PathVariable Long id) {
-//	    return ts.deleteTopic(id);
+//	    return tagS.deleteTopic(id);
 //	}
 
 }
