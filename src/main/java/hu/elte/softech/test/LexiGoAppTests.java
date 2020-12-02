@@ -71,8 +71,8 @@ public class LexiGoAppTests {
 
 	    Tag tagGet = restTemplate.getForObject(uriGet, Tag.class);
 
-//	    ResponseEntity<Tag> result = restTemplate.getForEntity(uriGet, Tag.class);
-
+	    ResponseEntity<Tag> result = restTemplate.getForEntity(uriGet, Tag.class);
+	    Assert.assertEquals(200, result.getStatusCodeValue());
 	    assertThat(tagGet).isNull();
 	}
 
@@ -90,7 +90,8 @@ public class LexiGoAppTests {
 
 	    String GetResult = restTemplate.getForObject(uriGet, String.class);
 
-//	    ResponseEntity<Tag> result = restTemplate.getForEntity(uriGet, Tag.class);
+	    ResponseEntity<String> result = restTemplate.getForEntity(uriGet, String.class);
+	    Assert.assertEquals(200, result.getStatusCodeValue());
 
 	    assertThat(!GetResult.contains("155"));
 	}
@@ -112,13 +113,22 @@ public class LexiGoAppTests {
 	}
 
 	@Test
-	public void testUserEntity() {
+	public void testUserEntity() throws URISyntaxException {
 		User testu = new User();
 		testu.setEmail("test@");
 		testu.setPassword("123");
 		testu.setUsername("testu");
 		testu.setRole("tester");
-		String testUsername = userS.createUserr(testu).getUsername();
+//		String testUsername = userS.createUserr(testu).getUsername();
+
+		String baseUrl = "http://localhost:" + port + "/register/user";
+	    URI uriPost = new URI(baseUrl);
+		ResponseEntity<String> result = restTemplate.postForEntity(uriPost, testu, String.class);
+	    Assert.assertEquals(201, result.getStatusCodeValue());
+
+	    String getUrl = "http://localhost:" + port + "/login/user/testu";
+	    URI uriGet = new URI(getUrl);
+	    String testUsername = restTemplate.getForObject(uriGet, User.class).getUsername();
 
 	    Assert.assertEquals(testUsername, testu.getUsername());
 	}
