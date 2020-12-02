@@ -11,8 +11,10 @@ public class UserTopicsAndEntrysAndFavs {
 
 	private List<Topic> topics;
 
+	private List<Topic> followedTopics;
+
 	private List<Entry> entrys;
 
-	private List<Entry> favs;
+	private List<Entry> favoriteEntrys;
 
 }

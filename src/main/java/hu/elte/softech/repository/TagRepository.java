@@ -42,4 +42,7 @@ public interface TagRepository extends JpaRepository<Tag, Long> {
 
 	@Query(value = "SELECT tt.tag_id FROM Topic_Tag tt WHERE tt.topic_id = :topicId", nativeQuery = true)
 	public List<String> findTopicsOfTag(Long topicId);
+
+	@Query(value = "SELECT COUNT(*) FROM Tag t WHERE t.id = :tagId", nativeQuery = true)
+	int checkExistenseOfTagByTagId(Long tagId);
 }

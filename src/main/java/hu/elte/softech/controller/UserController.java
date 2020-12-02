@@ -30,11 +30,11 @@ public class UserController {
 	    return us.getAllUsers();
 	}
 
-	//GET User By Username With Details
-	@RequestMapping(method=RequestMethod.GET, path="/user/{username}/get")
-	public UserTopicsAndEntrysAndFavs getOneUserByUsernameWD(@PathVariable String username) {
-		return us.findOneUserByUsernameWD(username);
-	}
+//	//GET User By Username With Details
+//	@RequestMapping(method=RequestMethod.GET, path="/user/{username}/get")
+//	public UserTopicsAndEntrysAndFavs getOneUserByUsernameWD(@PathVariable String username) {
+//		return us.findOneUserByUsernameWD(username);
+//	}
 
 	//GET User By UserId With Details
 	@RequestMapping(method=RequestMethod.GET, path="/user/{userId}/get")

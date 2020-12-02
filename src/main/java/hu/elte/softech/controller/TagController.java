@@ -40,7 +40,7 @@ public class TagController {
 
     //GET Tag
 	@RequestMapping(method=RequestMethod.GET, path="/tag/{tagId}")
-	public Tag findOneTag(@PathVariable Long tagId) {
+	public Tag findOneTag(@PathVariable Long tagId){
 		return tagS.findOneTag(tagId);
 	}
 

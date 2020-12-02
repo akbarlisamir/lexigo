@@ -2,7 +2,9 @@ package hu.elte.softech.service;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -10,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import hu.elte.softech.entity.Entry;
 import hu.elte.softech.entity.EntryRankTopic;
@@ -78,7 +82,6 @@ public class EntryServiceImpl implements EntryService {
 		entryWD.setRankDown(rankR.findRankByEntryId(entryId, false));
 		entryWD.setRankUp(rankR.findRankByEntryId(entryId, true));
 		entryWD.setFav(entryR.findNumberOfFavByEntryId(entryId));
-
 		return entryWD;
 	}
 
@@ -300,6 +303,33 @@ public class EntryServiceImpl implements EntryService {
 			temp.add(entryR.findById(Long.parseLong(s)).get());
 		}
 		return temp;
+	}
+
+	@Override
+	public Map<String, Object> mapEntry() {
+		ObjectMapper mapper = new ObjectMapper();
+
+        Map<String, Object> entryMap = new HashMap<String, Object>();
+
+		EntryWD entryWD = new EntryWD();
+		Entry entry = getEntry(165L);
+
+		entryWD.setEntry(entry);
+		Topic topic = topicS.getTopic(Long.parseLong(entryR.findTopicByEntryId(165L)));
+		entryWD.setTopic(topic);
+		entryWD.setTags(topicS.getTagListforTopicWD(topic.getId()));
+		entryWD.setUser(entry.getUser());
+		entryWD.setRankDown(rankR.findRankByEntryId(165L, false));
+		entryWD.setRankUp(rankR.findRankByEntryId(165L, true));
+		entryWD.setFav(entryR.findNumberOfFavByEntryId(165L));
+
+		entryMap.put("entry", entryWD.getEntry());
+		entryMap.put("topic", entryWD.getTopic());
+		entryMap.put("user", entryWD.getUser());
+		entryMap.put("fav", entryWD.getFav());
+
+		return entryMap;
+
 	}
 
 

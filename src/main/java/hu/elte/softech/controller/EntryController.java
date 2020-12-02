@@ -1,6 +1,8 @@
 package hu.elte.softech.controller;
 
 import java.util.List;
+import java.util.Map;
+
 import hu.elte.softech.entity.*;
 import hu.elte.softech.service.EntryService;
 
@@ -17,6 +19,17 @@ public class EntryController {
 
 	@Autowired
 	private EntryService entryS;
+
+
+
+	// GET Entrys With Details  ----->   JSON MAP Stuff
+	@RequestMapping(method = RequestMethod.GET, path = "/entrys/get/map")
+	public Map<String, Object> mapEntys() {
+		return entryS.mapEntry();
+	}
+
+
+
 
 	// GET Entrys
 	@RequestMapping(method = RequestMethod.GET, path = "/entrys")

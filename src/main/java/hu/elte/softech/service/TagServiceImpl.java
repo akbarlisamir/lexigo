@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import hu.elte.softech.controller.AppExceptionHandler.NotFoundException;
 import hu.elte.softech.entity.Tag;
 import hu.elte.softech.entity.TopicTag;
 import hu.elte.softech.entity.TopicUserTagsEntrys;
@@ -68,23 +69,29 @@ public class TagServiceImpl implements TagService{
 	public Tag findOneTag(Long tagId) {
 		Optional<Tag> tag = tagR.findById(tagId);
 		if(!tag.isPresent()) {
-			//throw new UserNotFoundException("id-" + id);
+//			 throw new NotFoundException();
+			return null;
 		}
 		return tag.get();
 	}
 
 	@Override
 	public ResponseEntity<Void> deleteTag(Long tagId) {
-		tagR.delFromTopicTagByTag(tagId);
-		tagR.deleteById(tagId);
-	    return ResponseEntity.noContent().build();
+		if(tagR.checkExistenseOfTagByTagId(tagId) != 0) {
+			tagR.delFromTopicTagByTag(tagId);
+			tagR.deleteById(tagId);
+		    return ResponseEntity.noContent().build();
+		}
+		else {
+			return null;
+		}
 	}
 
 	@Override
 	public List<TopicUserTagsEntrys> findOneTagTopics(Long tagId) {
-		return topicS.allTopicsWD().stream()
-				.filter(topic -> topic.getTags().contains(tagR.findById(tagId).get()))
-				.collect(Collectors.toList());
+		return topicS.allTopicsWD();//.stream()
+//				.filter(topic -> topic.getTags().contains(tagR.findById(tagId).get()))
+//				.collect(Collectors.toList());
 		//numberList.stream().filter(i -> i%2 == 0).collect(Collectors.toList());
 
 	}
