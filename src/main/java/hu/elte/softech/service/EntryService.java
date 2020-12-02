@@ -1,6 +1,7 @@
 package hu.elte.softech.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,9 @@ import hu.elte.softech.entity.Ranking;
 import hu.elte.softech.entity.Topic;
 
 public interface EntryService {
+
+	//MAP
+	Map<String, Object> mapEntry();
 
 	// GET Entrys
 	List<Entry> findAllEntrys();

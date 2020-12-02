@@ -11,6 +11,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import hu.elte.softech.entity.Entry;
 import hu.elte.softech.entity.Topic;
+import hu.elte.softech.entity.TopicUserTagsEntrys;
 import hu.elte.softech.entity.User;
 import hu.elte.softech.entity.UserTopicsAndEntrysAndFavs;
 import hu.elte.softech.repository.EntryRepository;
@@ -47,16 +48,11 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public List<UserTopicsAndEntrysAndFavs> getAllUsersWD() {
 		List<UserTopicsAndEntrysAndFavs> lstUTEF = new ArrayList<UserTopicsAndEntrysAndFavs>();
-		List<User> users = userR.findAll();
-		for(User u : users) {
+		List<User> listU = getAllUsers();
+		for(User u : listU) {
 			UserTopicsAndEntrysAndFavs utef = new UserTopicsAndEntrysAndFavs();
-			utef.setUser(u);
-//			utef.setEntrys(entrys);
-//			utef.setTopics(topics);
-//			utef.setFavs(favs);
-			lstUTEF.add(utef);
+			lstUTEF.add(findOneUserByUserIdWD(u.getId()));
 		}
-
 		return lstUTEF;
 	}
 
@@ -68,8 +64,14 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public UserTopicsAndEntrysAndFavs findOneUserByUserIdWD(Long userId) {
-		User user = userR.findById(userId).get();
-		return null;
+		User user = findOneUserByUserId(userId);
+		UserTopicsAndEntrysAndFavs utef = new UserTopicsAndEntrysAndFavs();
+		utef.setUser(user);
+		utef.setEntrys(getEntryListforUserWD(userId));
+		utef.setTopics(getTopicListforUserWD(userId));
+		utef.setFollowedTopics(topicS.getFollowTopicsByUser(userId));
+		utef.setFavoriteEntrys(entryS.getFavEntrysByUser(userId));
+		return utef;
 	}
 
 	@Override
@@ -94,6 +96,17 @@ public class UserServiceImpl implements UserService{
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 			.buildAndExpand(savedUser.getId()).toUri();
 		return ResponseEntity.created(location).build();
+	}
+
+	@Override
+	public User createUserr(User newUser) {
+		if(userR.findUserByUsername(newUser.getUsername()) == null && userR.findUserByEmail(newUser.getEmail()) == null)
+		{
+			return userR.save(newUser);
+		}
+		else {
+			return null;
+		}
 	}
 
 	@Override
@@ -129,5 +142,26 @@ public class UserServiceImpl implements UserService{
 		userR.deleteById(userId);
 		return ResponseEntity.noContent().build();
 	}
+
+
+	//region utils
+	private List<Entry> getEntryListforUserWD (Long userId){
+		List<Entry> ans = new ArrayList<Entry>();
+		for(Entry e: entryS.getEntrysByUser(userId)) {
+			ans.add(e);
+		}
+		return ans;
+	}
+
+	private List<Topic> getTopicListforUserWD(Long userId) {
+		List<Topic> ans = new ArrayList<Topic>();
+		for(Topic t: topicS.getTopicsByUser(userId)) {
+			ans.add(t);
+		}
+		return ans;
+	}
+
+
+	//end
 
 }

@@ -35,4 +35,7 @@ public interface UserService {
 
 	//DELETE User
 	ResponseEntity<Void> deleteUser(Long userId);
+
+	//POST User another version for test
+	User createUserr(User newUser);
 }
