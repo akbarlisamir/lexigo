@@ -28,11 +28,11 @@ public class LexiGoAppTests {
 	@Autowired
 	private UserController userC;
 
-	@Autowired
-	private UserService userS;
-
-	@Autowired
-	private TopicService topicS;
+//	@Autowired
+//	private UserService userS;
+//
+//	@Autowired
+//	private TopicService topicS;
 
 	@Autowired
 	private EntryService entryS;
